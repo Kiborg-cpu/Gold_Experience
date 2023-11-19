@@ -1,6 +1,7 @@
 import flet as ft
 
 import Registr
+from Money import MoneyContainer
 
 
 def main(page: ft.Page):
@@ -9,9 +10,7 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.window_resizable = True
 
-    def button_clicked(e):
-        t.value = f"Textboxes values are:  '{login.value}', '{password.value}'."
-        page.update()
+    registr_page = Registr.Registration(page)
 
     login = ft.TextField(label='Логин', color=ft.colors.WHITE, width=400, height=70,
                          border_color=ft.colors.AMBER, border_radius=5)
@@ -22,7 +21,7 @@ def main(page: ft.Page):
                             height=70,
                             border_color=ft.colors.AMBER, border_radius=5)
 
-    b = ft.ElevatedButton(text="Войти", on_click=button_clicked)
+    b = ft.ElevatedButton(text="Войти", on_click=registr_page.login_account)
 
     registr = ft.TextButton(text="Создать аккаунт",
                             width=180,
@@ -51,7 +50,16 @@ def main(page: ft.Page):
             page.views.append(
                 ft.View(
                     "/registration",
-                    controls=[Registr.Registration(page)],
+                    controls=[registr_page],
+                    vertical_alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                )
+            )
+        elif page.route == "/golden_coin":
+            page.views.append(
+                ft.View(
+                    "/golden_coin",
+                    controls=[MoneyContainer(page)],
                     vertical_alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER
                 )
@@ -65,10 +73,9 @@ def main(page: ft.Page):
 
     t = ft.Text()
 
-    # page.add(page_login)
     page.on_route_change = route_change
     page.on_view_pop = view_pop
     page.go(page.route)
 
 
-ft.app(target=main)#, view=ft.WEB_BROWSER)
+ft.app(target=main, view=ft.WEB_BROWSER)
